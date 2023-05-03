@@ -4,6 +4,5 @@
 </script>
 
 <main class="bg-none">
-    <Navbar/>
     <Gallery/>
 </main>

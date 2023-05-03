@@ -3,7 +3,6 @@
 </script>
 
 <main>
-  <Navbar />
   <div class=" flex items-center justify-center mx-10">
     <div
       class="max-w-4xl p-10 my-10 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"

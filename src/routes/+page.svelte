@@ -6,7 +6,6 @@
 </script>
 
 <main>
-  <Navbar />
   <div class="font-mono mt-12 ml-12">
     <pre>
         <h1 class="text-5xl">   Best <br />   Ordanic <br />   Foods</h1>

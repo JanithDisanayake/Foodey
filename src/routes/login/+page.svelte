@@ -3,20 +3,22 @@
 </script>
 
 <main>
-  <Navbar />
   <div class=" flex items-center justify-center my-12">
     <div
-      class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+      class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
+    >
       <form class="space-y-6" action="#">
-        <h5 class="text-center text-3xl font-medium text-gray-900 dark:text-white">
-          Sign in 
+        <h5
+          class="text-center text-3xl font-medium text-gray-900 dark:text-white"
+        >
+          Sign in
         </h5>
         <div>
           <label
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your email</label
-          >
+            >Your email
+          </label>
           <input
             type="email"
             name="email"
@@ -59,7 +61,7 @@
             >
           </div>
           <a
-            href="#"
+            href="/"
             class="ml-auto text-sm text-blue-900 hover:underline dark:text-blue-500"
             >Lost Password?</a
           >
@@ -70,7 +72,7 @@
           >Login</button
         >
         <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-          Not registered? 
+          Not registered?
           <a
             href="/register"
             class="text-blue-900 hover:underline dark:text-blue-500"
