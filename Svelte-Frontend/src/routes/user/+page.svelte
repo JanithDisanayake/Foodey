@@ -36,7 +36,7 @@
                         {user.name}
                     </td>
                     <td class="px-6 py-4">
-                        {user.age}
+                        {user.email}
                     </td>
                     <td>
                         <a href="user/{user.id}">VISIT</a>
