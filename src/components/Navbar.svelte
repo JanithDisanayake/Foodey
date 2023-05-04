@@ -4,6 +4,7 @@
       <img
         class="mx-5"
         src="https://img.icons8.com/color/48/null/hamburger.png"
+        alt=""
       />
       <span class="font-semibold text-3xl tracking-tight">Foodey</span>
     </div>
@@ -57,7 +58,7 @@
       >
       <a
         href="/register"
-        class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white mt-4 lg:mt-0"
+        class="ml-5 inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white mt-4 lg:mt-0"
         >Register</a
       >
     </div>

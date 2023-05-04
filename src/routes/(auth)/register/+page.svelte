@@ -1,5 +1,5 @@
 <script>
-  import Navbar from "../../components/Navbar.svelte";
+  import Navbar from "../../../components/Navbar.svelte";
 </script>
 
 <main>
@@ -156,7 +156,7 @@
             for="remember"
             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >I agree with the <a
-              href="#"
+              href="/"
               class="text-blue-600 hover:underline dark:text-blue-500"
               >terms and conditions</a
             >.</label
