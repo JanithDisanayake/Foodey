@@ -1,6 +1,3 @@
-<script>
-  import Navbar from "../../components/Navbar.svelte";
-</script>
 
 <main>
   <div class=" flex items-center justify-center my-12">

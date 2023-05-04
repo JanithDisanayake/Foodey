@@ -44,6 +44,12 @@
         Gallery
       </a>
       <a
+        href="/user"
+        class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4"
+      >
+        Users
+      </a>
+      <a
         href="/about"
         class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white"
       >
