@@ -53,6 +53,15 @@ func main() {
 		context.JSON(http.StatusOK, user)
 	})
 
+	r.PATCH("/", func(context *gin.Context) {
+		var user User
+		if err := context.ShouldBind(&user); err != nil {
+			context.String(http.StatusBadRequest, "bad request: %v", err)
+		}
+		user = updateUser(db, user)
+		context.JSON(http.StatusOK, user)
+	})
+
 	r.Run(":3000")
 }
 
@@ -60,4 +69,21 @@ func getAllUsers(db *gorm.DB) []User {
 	var users []User
 	db.Find(&users)
 	return users
+}
+
+
+func getUserById(db *gorm.DB, id int) User {
+	var users []User
+	db.Find(&users)
+	for i := range users {
+		if users[i].ID == uint(id) {
+			return users[i]
+		}
+	}
+	return User{}
+}
+
+func updateUser(db *gorm.DB, user User) User {
+	db.Save(user)
+	return user
 }
