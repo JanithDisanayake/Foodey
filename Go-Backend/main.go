@@ -31,16 +31,16 @@ func main() {
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
 	r.GET("/", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{"message": "Hello World !"})
+		var users []User
+		users = getAllUsers(db)
+		context.JSON(http.StatusOK, users)
 	})
 
 	r.GET("/:id", func(context *gin.Context) {
 		id, _ := strconv.Atoi(context.Param("id"))
-		fmt.Println(id)
-		context.JSON(http.StatusOK, gin.H{
-			"message": "Hello World !",
-			"id":      id,
-		})
+		var user User
+		db.First(&user, "id = ?", id) // find product with integer primary key
+		context.JSON(http.StatusOK, user)
 	})
 
 	r.POST("/", func(context *gin.Context) {
@@ -48,9 +48,16 @@ func main() {
 		if err := context.ShouldBind(&user); err != nil {
 			context.String(http.StatusBadRequest, "bad request %v", err)
 		}
+		db.Create(&User{Name: user.Name, Age: user.Age})
 		fmt.Println(user)
-		context.String(http.StatusOK, "Hello %s", user.Name)
+		context.JSON(http.StatusOK, user)
 	})
 
 	r.Run(":3000")
+}
+
+func getAllUsers(db *gorm.DB) []User {
+	var users []User
+	db.Find(&users)
+	return users
 }
