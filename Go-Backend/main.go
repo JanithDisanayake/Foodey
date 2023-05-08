@@ -62,6 +62,13 @@ func main() {
 		context.JSON(http.StatusOK, user)
 	})
 
+	r.DELETE("/:id", func(context *gin.Context) {
+		id, _ := strconv.Atoi(context.Param("id"))
+		user := getUserById(db, id)
+		db.Delete(&user)
+		context.String(http.StatusOK, "user deleted")
+	})
+
 	r.Run(":3000")
 }
 
