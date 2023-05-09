@@ -10,7 +10,7 @@
             ID:
         </td>
         <td class="p-5">
-            {user.id}
+            {user.ID}
         </td>
     </tr>
     <tr>
@@ -18,7 +18,7 @@
             Name:
         </td>
         <td class="p-5">
-            {user.name}
+            {user.Name}
         </td>
     </tr>
     <tr>
@@ -26,7 +26,7 @@
             AGE:
         </td>
         <td class="p-5">
-            {user.age}
+            {user.Age}
         </td>
     </tr>
 </table>

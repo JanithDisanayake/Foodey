@@ -1,6 +1,4 @@
 <script>
-    import Table from '../../components/Table.svelte';
-
     export let data
     const users =  data.users // this property
 
@@ -30,16 +28,16 @@
             {#each users as user}
                 <tr class="bg-orange-200 border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-blue-900 whitespace-nowrap dark:text-white">
-                        <a href="user/{user.id}">{user.id}</a>
+                        <a href="user/{user.ID}">{user.ID}</a>
                     </th>
                     <td class="px-6 py-4">
-                        {user.name}
+                        {user.Name}
                     </td>
                     <td class="px-6 py-4">
-                        {user.email}
+                        {user.Age}
                     </td>
                     <td>
-                        <a href="user/{user.id}">VISIT</a>
+                        <a href="user/{user.ID}">VISIT</a>
                     </td>
                 </tr>
             {/each}

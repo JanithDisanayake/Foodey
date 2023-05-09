@@ -31,8 +31,10 @@ func main() {
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
 	r.GET("/", func(context *gin.Context) {
-		var users []User
-		users = getAllUsers(db)
+
+		users := getAllUsers(db)
+
+		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		context.JSON(http.StatusOK, users)
 	})
 
@@ -40,6 +42,8 @@ func main() {
 		id, _ := strconv.Atoi(context.Param("id"))
 		var user User
 		db.First(&user, "id = ?", id) // find product with integer primary key
+
+		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		context.JSON(http.StatusOK, user)
 	})
 
@@ -77,7 +81,6 @@ func getAllUsers(db *gorm.DB) []User {
 	db.Find(&users)
 	return users
 }
-
 
 func getUserById(db *gorm.DB, id int) User {
 	var users []User
