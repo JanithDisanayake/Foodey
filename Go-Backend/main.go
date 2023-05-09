@@ -18,6 +18,14 @@ type User struct {
 	Age  uint
 }
 
+type Order struct {
+	gorm.Model
+	ID    uint `gorm:"primaryKey;unique"`
+	Name  string
+	Desc  string
+	Image string
+}
+
 func main() {
 	r := gin.Default()
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
@@ -28,7 +36,7 @@ func main() {
 	} else {
 		fmt.Printf(" 🎯 Database is created \n\n")
 	}
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{}, &Order{})
 
 	r.GET("/users", func(context *gin.Context) {
 		var users []User
@@ -74,6 +82,24 @@ func main() {
 		db.Delete(&user)
 
 		context.String(http.StatusOK, "user deleted")
+	})
+
+	r.GET("/orders/", func(context *gin.Context) {
+		var orders []Order
+		db.Find(&orders)
+
+		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		context.JSON(http.StatusOK, orders)
+	})
+
+	r.POST("/orders/", func(context *gin.Context) {
+		var order Order
+		if err := context.ShouldBind(&order); err != nil {
+			context.String(http.StatusBadRequest, "bad request %v", err)
+		}
+		db.Create(&Order{Name: order.Name, Desc: order.Desc, Image: order.Image})
+
+		context.JSON(http.StatusOK, order)
 	})
 
 	r.Run(":3000")
