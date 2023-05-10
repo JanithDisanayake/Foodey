@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"go-backend/model"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,20 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type User struct {
-	gorm.Model
-	ID   uint `gorm:"primaryKey;unique"`
-	Name string
-	Age  uint
-}
-
-type Order struct {
-	gorm.Model
-	ID    uint `gorm:"primaryKey;unique"`
-	Name  string
-	Desc  string
-	Image string
-}
 
 func main() {
 	r := gin.Default()
@@ -36,10 +23,10 @@ func main() {
 	} else {
 		fmt.Printf(" 🎯 Database is created \n\n")
 	}
-	db.AutoMigrate(&User{}, &Order{})
+	db.AutoMigrate(&model.User{}, &model.Order{})
 
 	r.GET("/users", func(context *gin.Context) {
-		var users []User
+		var users []model.User
 		db.Find(&users)
 
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -48,7 +35,7 @@ func main() {
 
 	r.GET("/users/:id", func(context *gin.Context) {
 		id, _ := strconv.Atoi(context.Param("id"))
-		var user User
+		var user model.User
 		db.First(&user, "id = ?", id) // find product with integer primary key
 
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -56,17 +43,17 @@ func main() {
 	})
 
 	r.POST("/users", func(context *gin.Context) {
-		var user User
+		var user model.User
 		if err := context.ShouldBind(&user); err != nil {
 			context.String(http.StatusBadRequest, "bad request %v", err)
 		}
-		db.Create(&User{Name: user.Name, Age: user.Age})
+		db.Create(&model.User{Name: user.Name, Age: user.Age})
 
 		context.JSON(http.StatusOK, user)
 	})
 
 	r.PATCH("/users", func(context *gin.Context) {
-		var user User
+		var user model.User
 		if err := context.ShouldBind(&user); err != nil {
 			context.String(http.StatusBadRequest, "bad request: %v", err)
 		}
@@ -77,7 +64,7 @@ func main() {
 
 	r.DELETE("/users/:id", func(context *gin.Context) {
 		id, _ := strconv.Atoi(context.Param("id"))
-		var user User
+		var user model.User
 		db.Take(&user, "id = ?", id)
 		db.Delete(&user)
 
@@ -85,7 +72,7 @@ func main() {
 	})
 
 	r.GET("/orders/", func(context *gin.Context) {
-		var orders []Order
+		var orders []model.Order
 		db.Find(&orders)
 
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -93,11 +80,11 @@ func main() {
 	})
 
 	r.POST("/orders/", func(context *gin.Context) {
-		var order Order
+		var order model.Order
 		if err := context.ShouldBind(&order); err != nil {
 			context.String(http.StatusBadRequest, "bad request %v", err)
 		}
-		db.Create(&Order{Name: order.Name, Desc: order.Desc, Image: order.Image})
+		db.Create(&model.Order{Name: order.Name, Desc: order.Desc, Image: order.Image})
 
 		context.JSON(http.StatusOK, order)
 	})
