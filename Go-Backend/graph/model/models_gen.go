@@ -2,19 +2,34 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type NewOrder struct {
+	Name  string `json:"Name"`
+	Desc  int    `json:"Desc"`
+	Image string `json:"Image"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type NewUser struct {
+	Name string `json:"Name"`
+	Age  int    `json:"Age"`
+}
+
+type Order struct {
+	ID    int    `json:"ID"`
+	Name  string `json:"Name"`
+	Desc  string `json:"Desc"`
+	Image string `json:"Image"`
+}
+
+type OrderQuery struct {
+	Orders []*Order `json:"orders"`
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID   int    `json:"ID"`
+	Name string `json:"Name"`
+	Age  int    `json:"Age"`
+}
+
+type UserQuery struct {
+	Users []*User `json:"users"`
 }
