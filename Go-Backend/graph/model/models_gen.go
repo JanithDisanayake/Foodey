@@ -2,34 +2,13 @@
 
 package model
 
-type NewOrder struct {
-	Name  string `json:"Name"`
-	Desc  int    `json:"Desc"`
-	Image string `json:"Image"`
-}
-
-type NewUser struct {
-	Name string `json:"Name"`
-	Age  int    `json:"Age"`
-}
-
-type Order struct {
-	ID    int    `json:"ID"`
-	Name  string `json:"Name"`
-	Desc  string `json:"Desc"`
-	Image string `json:"Image"`
-}
-
-type OrderQuery struct {
-	Orders []*Order `json:"orders"`
-}
-
 type User struct {
 	ID   int    `json:"ID"`
 	Name string `json:"Name"`
 	Age  int    `json:"Age"`
 }
 
-type UserQuery struct {
-	Users []*User `json:"users"`
+type UserInput struct {
+	Name string `json:"Name"`
+	Age  int    `json:"Age"`
 }
