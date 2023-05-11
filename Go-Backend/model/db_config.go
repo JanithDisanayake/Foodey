@@ -1,8 +1,7 @@
-package database
+package model
 
 import (
 	"fmt"
-	"go-backend/model"
 	"log"
 
 	"gorm.io/driver/sqlite"
@@ -17,7 +16,7 @@ func New() *gorm.DB{
 	} else {
 		fmt.Printf(" 🎯 Database is created \n\n")
 	}
-	db.AutoMigrate(&model.User{}, &model.Order{})
+	db.AutoMigrate(&User{})
 
 	return db
 }

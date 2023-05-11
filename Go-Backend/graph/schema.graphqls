@@ -5,33 +5,15 @@ type User {
 	Age:  Int!
 }
 
-type Order {
-	ID:    Int! 
-	Name:  String!
-	Desc:  String!
-	Image: String!
-}
-
-type UserQuery {
+type Query {
   users: [User!]!
 }
 
-type OrderQuery {
-  orders: [Order!]!
-}
-
-input NewUser {
+input UserInput {
   Name: String!
   Age:  Int!
 }
 
-input NewOrder {
-  Name:  String!
-  Desc:  Int!
-  Image: String!
-}
-
 type Mutation {
-  createUser(input: NewUser!): User!
-  createOrder(input: NewOrder!): Order!
+  createUser(input: UserInput!): User!
 }
