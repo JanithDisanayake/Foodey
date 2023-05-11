@@ -2,22 +2,45 @@ package main
 
 import (
 	"fmt"
-	"go-backend/database"
 	"go-backend/model"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
+
+type User struct {
+	gorm.Model
+	ID   uint `gorm:"primaryKey;unique"`
+	Name string
+	Age  uint
+}
+
+type Order struct {
+	gorm.Model
+	ID    uint `gorm:"primaryKey;unique"`
+	Name  string
+	Desc  string
+	Image string
+}
 
 func main() {
 	r := gin.Default()
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
-	db := database.New()
+	db, err := gorm.Open(sqlite.Open("foodey.db"), &gorm.Config{})
+	if err != nil {
+		log.Fatal("failed to connect database")
+	} else {
+		fmt.Printf(" 🎯 Database is created \n\n")
+	}
+	db.AutoMigrate(&User{}, &model.Order{})
 
 	r.GET("/users", func(context *gin.Context) {
-		var users []model.User
+		var users []User
 		db.Find(&users)
 
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -26,7 +49,7 @@ func main() {
 
 	r.GET("/users/:id", func(context *gin.Context) {
 		id, _ := strconv.Atoi(context.Param("id"))
-		var user model.User
+		var user User
 		db.First(&user, "id = ?", id) // find product with integer primary key
 
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -34,17 +57,17 @@ func main() {
 	})
 
 	r.POST("/users", func(context *gin.Context) {
-		var user model.User
+		var user User
 		if err := context.ShouldBind(&user); err != nil {
 			context.String(http.StatusBadRequest, "bad request %v", err)
 		}
-		db.Create(&model.User{Name: user.Name, Age: user.Age})
+		db.Create(&User{Name: user.Name, Age: user.Age})
 
 		context.JSON(http.StatusOK, user)
 	})
 
 	r.PATCH("/users", func(context *gin.Context) {
-		var user model.User
+		var user User
 		if err := context.ShouldBind(&user); err != nil {
 			context.String(http.StatusBadRequest, "bad request: %v", err)
 		}
@@ -55,7 +78,7 @@ func main() {
 
 	r.DELETE("/users/:id", func(context *gin.Context) {
 		id, _ := strconv.Atoi(context.Param("id"))
-		var user model.User
+		var user User
 		db.Take(&user, "id = ?", id)
 		db.Delete(&user)
 
