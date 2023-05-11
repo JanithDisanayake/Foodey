@@ -8,7 +8,6 @@ import (
 	"context"
 	// "fmt"
 	"go-backend/graph/model"
-	"math/rand"
 )
 
 var db = model.New()
@@ -16,7 +15,6 @@ var db = model.New()
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
 	user := &model.User{
-		ID:   uint(rand.Int()),
 		Name: input.Name,
 		Age:  uint(input.Age),
 	}
@@ -27,7 +25,6 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 // CreateOrder is the resolver for the createOrder field.
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
 	order := &model.Order{
-		ID:    uint(rand.Uint32()),
 		Name:  input.Name,
 		Desc:  input.Desc,
 		Image: input.Image,
@@ -38,7 +35,7 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInp
 
 // ID is the resolver for the ID field.
 func (r *orderResolver) ID(ctx context.Context, obj *model.Order) (int, error) {
-	return int(obj.ID),nil
+	return int(obj.ID), nil
 }
 
 // Users is the resolver for the users field.
