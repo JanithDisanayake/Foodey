@@ -2,12 +2,6 @@
 
 package model
 
-type User struct {
-	ID   int    `json:"ID"`
-	Name string `json:"Name"`
-	Age  int    `json:"Age"`
-}
-
 type UserInput struct {
 	Name string `json:"Name"`
 	Age  int    `json:"Age"`
