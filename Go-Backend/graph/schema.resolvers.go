@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	// "fmt"
 	"go-backend/graph/model"
 	"math/rand"
 )
@@ -15,31 +16,56 @@ var db = model.New()
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
 	user := &model.User{
-		ID: uint(rand.Int()),
+		ID:   uint(rand.Int()),
 		Name: input.Name,
-		Age: uint(input.Age),
+		Age:  uint(input.Age),
 	}
 	model.SaveUser(db, user)
 	return user, nil
 }
 
+// CreateOrder is the resolver for the createOrder field.
+func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
+	order := &model.Order{
+		ID:    uint(rand.Uint32()),
+		Name:  input.Name,
+		Desc:  input.Desc,
+		Image: input.Image,
+	}
+	model.SaveOrder(db, order)
+	return order, nil
+}
+
+// ID is the resolver for the ID field.
+func (r *orderResolver) ID(ctx context.Context, obj *model.Order) (int, error) {
+	return int(obj.ID),nil
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	return model.FindAllUsers(db),nil
+	return model.FindAllUsers(db), nil
+}
+
+// Orders is the resolver for the orders field.
+func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
+	return model.FindAllOrders(db), nil
 }
 
 // ID is the resolver for the ID field.
 func (r *userResolver) ID(ctx context.Context, obj *model.User) (int, error) {
-	return int(obj.ID),nil
+	return int(obj.ID), nil
 }
 
 // Age is the resolver for the Age field.
 func (r *userResolver) Age(ctx context.Context, obj *model.User) (int, error) {
-	return int(obj.Age),nil
+	return int(obj.Age), nil
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
+// Order returns OrderResolver implementation.
+func (r *Resolver) Order() OrderResolver { return &orderResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
@@ -48,5 +74,13 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 func (r *Resolver) User() UserResolver { return &userResolver{r} }
 
 type mutationResolver struct{ *Resolver }
+type orderResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
