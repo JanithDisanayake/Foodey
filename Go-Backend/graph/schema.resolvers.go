@@ -6,28 +6,36 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"go-backend/graph/model"
+	"math/rand"
 )
+
+var db = model.New()
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	user := &model.User{
+		ID: uint(rand.Int()),
+		Name: input.Name,
+		Age: uint(input.Age),
+	}
+	model.SaveUser(db, user)
+	return user, nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	return model.FindAllUsers(db),nil
 }
 
 // ID is the resolver for the ID field.
 func (r *userResolver) ID(ctx context.Context, obj *model.User) (int, error) {
-	panic(fmt.Errorf("not implemented: ID - ID"))
+	return int(obj.ID),nil
 }
 
 // Age is the resolver for the Age field.
 func (r *userResolver) Age(ctx context.Context, obj *model.User) (int, error) {
-	panic(fmt.Errorf("not implemented: Age - Age"))
+	return int(obj.Age),nil
 }
 
 // Mutation returns MutationResolver implementation.
