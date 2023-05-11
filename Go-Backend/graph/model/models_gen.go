@@ -2,6 +2,12 @@
 
 package model
 
+type OrderInput struct {
+	Name  string `json:"Name"`
+	Desc  string `json:"Desc"`
+	Image string `json:"Image"`
+}
+
 type UserInput struct {
 	Name string `json:"Name"`
 	Age  int    `json:"Age"`

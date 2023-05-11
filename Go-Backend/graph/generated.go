@@ -38,6 +38,7 @@ type Config struct {
 
 type ResolverRoot interface {
 	Mutation() MutationResolver
+	Order() OrderResolver
 	Query() QueryResolver
 	User() UserResolver
 }
@@ -47,11 +48,20 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		CreateUser func(childComplexity int, input model.UserInput) int
+		CreateOrder func(childComplexity int, input model.OrderInput) int
+		CreateUser  func(childComplexity int, input model.UserInput) int
+	}
+
+	Order struct {
+		Desc  func(childComplexity int) int
+		ID    func(childComplexity int) int
+		Image func(childComplexity int) int
+		Name  func(childComplexity int) int
 	}
 
 	Query struct {
-		Users func(childComplexity int) int
+		Orders func(childComplexity int) int
+		Users  func(childComplexity int) int
 	}
 
 	User struct {
@@ -63,9 +73,14 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.UserInput) (*model.User, error)
+	CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error)
+}
+type OrderResolver interface {
+	ID(ctx context.Context, obj *model.Order) (int, error)
 }
 type QueryResolver interface {
 	Users(ctx context.Context) ([]*model.User, error)
+	Orders(ctx context.Context) ([]*model.Order, error)
 }
 type UserResolver interface {
 	ID(ctx context.Context, obj *model.User) (int, error)
@@ -88,6 +103,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Mutation.createOrder":
+		if e.complexity.Mutation.CreateOrder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOrder_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateOrder(childComplexity, args["input"].(model.OrderInput)), true
+
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
 			break
@@ -99,6 +126,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.UserInput)), true
+
+	case "Order.Desc":
+		if e.complexity.Order.Desc == nil {
+			break
+		}
+
+		return e.complexity.Order.Desc(childComplexity), true
+
+	case "Order.ID":
+		if e.complexity.Order.ID == nil {
+			break
+		}
+
+		return e.complexity.Order.ID(childComplexity), true
+
+	case "Order.Image":
+		if e.complexity.Order.Image == nil {
+			break
+		}
+
+		return e.complexity.Order.Image(childComplexity), true
+
+	case "Order.Name":
+		if e.complexity.Order.Name == nil {
+			break
+		}
+
+		return e.complexity.Order.Name(childComplexity), true
+
+	case "Query.orders":
+		if e.complexity.Query.Orders == nil {
+			break
+		}
+
+		return e.complexity.Query.Orders(childComplexity), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -136,6 +198,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputOrderInput,
 		ec.unmarshalInputUserInput,
 	)
 	first := true
@@ -215,6 +278,21 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation_createOrder_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.OrderInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNOrderInput2goᚑbackendᚋgraphᚋmodelᚐOrderInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -347,6 +425,247 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createOrder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createOrder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateOrder(rctx, fc.Args["input"].(model.OrderInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Order)
+	fc.Result = res
+	return ec.marshalNOrder2ᚖgoᚑbackendᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createOrder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ID":
+				return ec.fieldContext_Order_ID(ctx, field)
+			case "Name":
+				return ec.fieldContext_Order_Name(ctx, field)
+			case "Desc":
+				return ec.fieldContext_Order_Desc(ctx, field)
+			case "Image":
+				return ec.fieldContext_Order_Image(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Order", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createOrder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Order_ID(ctx context.Context, field graphql.CollectedField, obj *model.Order) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Order_ID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Order().ID(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Order_ID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Order",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Order_Name(ctx context.Context, field graphql.CollectedField, obj *model.Order) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Order_Name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Order_Name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Order",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Order_Desc(ctx context.Context, field graphql.CollectedField, obj *model.Order) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Order_Desc(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Desc, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Order_Desc(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Order",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Order_Image(ctx context.Context, field graphql.CollectedField, obj *model.Order) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Order_Image(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Image, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Order_Image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Order",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_users(ctx, field)
 	if err != nil {
@@ -394,6 +713,60 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 				return ec.fieldContext_User_Age(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_orders(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Orders(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Order)
+	fc.Result = res
+	return ec.marshalNOrder2ᚕᚖgoᚑbackendᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_orders(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ID":
+				return ec.fieldContext_Order_ID(ctx, field)
+			case "Name":
+				return ec.fieldContext_Order_Name(ctx, field)
+			case "Desc":
+				return ec.fieldContext_Order_Desc(ctx, field)
+			case "Image":
+				return ec.fieldContext_Order_Image(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Order", field.Name)
 		},
 	}
 	return fc, nil
@@ -2433,6 +2806,53 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputOrderInput(ctx context.Context, obj interface{}) (model.OrderInput, error) {
+	var it model.OrderInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"Name", "Desc", "Image"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "Name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "Desc":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Desc"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Desc = data
+		case "Image":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Image"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Image = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj interface{}) (model.UserInput, error) {
 	var it model.UserInput
 	asMap := map[string]interface{}{}
@@ -2507,6 +2927,77 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "createOrder":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createOrder(ctx, field)
+			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var orderImplementors = []string{"Order"}
+
+func (ec *executionContext) _Order(ctx context.Context, sel ast.SelectionSet, obj *model.Order) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, orderImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Order")
+		case "ID":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Order_ID(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "Name":
+
+			out.Values[i] = ec._Order_Name(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "Desc":
+
+			out.Values[i] = ec._Order_Desc(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "Image":
+
+			out.Values[i] = ec._Order_Image(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2547,6 +3038,29 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_users(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "orders":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_orders(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -2997,6 +3511,69 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNOrder2goᚑbackendᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v model.Order) graphql.Marshaler {
+	return ec._Order(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOrder2ᚕᚖgoᚑbackendᚋgraphᚋmodelᚐOrderᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Order) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNOrder2ᚖgoᚑbackendᚋgraphᚋmodelᚐOrder(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNOrder2ᚖgoᚑbackendᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v *model.Order) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Order(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNOrderInput2goᚑbackendᚋgraphᚋmodelᚐOrderInput(ctx context.Context, v interface{}) (model.OrderInput, error) {
+	res, err := ec.unmarshalInputOrderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
