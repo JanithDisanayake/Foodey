@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go-backend/model"
+	// "go-backend/model"
 	"log"
 	"net/http"
 	"strconv"
@@ -37,7 +37,7 @@ func main() {
 	} else {
 		fmt.Printf(" 🎯 Database is created \n\n")
 	}
-	db.AutoMigrate(&User{}, &model.Order{})
+	db.AutoMigrate(&User{}, &Order{})
 
 	r.GET("/users", func(context *gin.Context) {
 		var users []User
@@ -86,7 +86,7 @@ func main() {
 	})
 
 	r.GET("/orders/", func(context *gin.Context) {
-		var orders []model.Order
+		var orders []Order
 		db.Find(&orders)
 
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -94,11 +94,11 @@ func main() {
 	})
 
 	r.POST("/orders/", func(context *gin.Context) {
-		var order model.Order
+		var order Order
 		if err := context.ShouldBind(&order); err != nil {
 			context.String(http.StatusBadRequest, "bad request %v", err)
 		}
-		db.Create(&model.Order{Name: order.Name, Desc: order.Desc, Image: order.Image})
+		db.Create(&Order{Name: order.Name, Desc: order.Desc, Image: order.Image})
 
 		context.JSON(http.StatusOK, order)
 	})
