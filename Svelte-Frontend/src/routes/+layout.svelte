@@ -4,6 +4,8 @@
   import Navbar from "../components/Navbar.svelte";
 </script>
 
-<Navbar/>
-<slot />
-<Footer/>
+<div class="flex flex-col h-screen justify-between">
+    <Navbar/>
+    <slot />
+    <Footer/>
+</div>
