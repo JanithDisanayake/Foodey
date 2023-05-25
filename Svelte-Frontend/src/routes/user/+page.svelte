@@ -2,12 +2,12 @@
     export let data
     const users =  data.users // this property
 
-    
+
 </script>
 
-<h1 class="text-4xl font-bold ml-12 my-10">{data.title}</h1>
+<h1 class="text-4xl font-bold ml-12 my-5">{data.title}</h1>
 
-<div class="relative overflow-x-auto p-10 mb-12">
+<div class="relative overflow-x-auto px-10 mb-12">
     <table class="w-full text-sm text-left text-black dark:text-gray-400">
         <thead class="text-s text-white font-bold uppercase bg-black dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -44,5 +44,4 @@
 
         </tbody>
     </table>
-    <div class="mb-10"/>
 </div>
