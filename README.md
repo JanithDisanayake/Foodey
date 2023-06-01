@@ -20,3 +20,6 @@
 - > https://gqlgen.com/
 - > https://youtube.com/playlist?list=PL3eAkoh7fypqxiqDq9OQGm3aJO7dZjSBI
 - > https://www.soberkoder.com/go-graphql-api-mysql-gorm/
+
+### icons :
+- > https://www.tailwindtoolbox.com/icons
