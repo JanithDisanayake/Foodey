@@ -31,7 +31,7 @@ func main() {
 	r := gin.Default()
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
-	db, err := gorm.Open(sqlite.Open("foodey.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("../foodey.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("failed to connect database")
 	} else {
