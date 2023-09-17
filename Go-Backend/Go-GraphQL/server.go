@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-backend/graph"
+	"Go-Backend/Go-GraphQL/graph"
 	"log"
 	"net/http"
 	"os"
