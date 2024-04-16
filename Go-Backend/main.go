@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go-backend/graph/model"
+	"go-backend/model"
 	"net/http"
 	"strconv"
 

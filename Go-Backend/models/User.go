@@ -1,4 +1,4 @@
-package model
+package models
 
 import (
 	"gorm.io/gorm"
@@ -16,13 +16,13 @@ type UserInterface interface {
 	FindAllUsers() []*User
 }
 
-
-func SaveUser (db *gorm.DB, user *User) {
+func SaveUser(db *gorm.DB, user *User) {
 	db.Create(&user)
 }
 
-func FindAllUsers (db *gorm.DB) []*User {
+func FindAllUsers(db *gorm.DB) []*User {
 	var users []*User
 	db.Find(&users)
 	return users
 }
+
