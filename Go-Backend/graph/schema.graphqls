@@ -1,15 +1,14 @@
-
 type User {
-	ID:   Int! 
-	Name: String!
-	Age:  Int!
+  ID: Int!
+  Name: String!
+  Age: Int!
 }
 
 type Order {
-	ID:    Int!
-	Name:  String!
-	Desc:  String!
-	Image: String!
+  ID: Int!
+  Name: String!
+  Desc: String!
+  Image: String!
 }
 
 type Query {
@@ -19,13 +18,13 @@ type Query {
 
 input UserInput {
   Name: String!
-  Age:  Int!
+  Age: Int!
 }
 
 input OrderInput {
-	Name:  String!
-	Desc:  String!
-	Image: String!
+  Name: String!
+  Desc: String!
+  Image: String!
 }
 
 type Mutation {

@@ -6,55 +6,52 @@ package graph
 
 import (
 	"context"
-	// "fmt"
-	"go-backend/graph/model"
+	"go-backend/models"
 )
 
-var db = model.New()
-
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	user := &model.User{
+func (r *mutationResolver) CreateUser(ctx context.Context, input models.UserInput) (*models.User, error) {
+	user := &models.User{
 		Name: input.Name,
 		Age:  uint(input.Age),
 	}
-	model.SaveUser(db, user)
+	models.SaveUser(db, user)
 	return user, nil
 }
 
 // CreateOrder is the resolver for the createOrder field.
-func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	order := &model.Order{
+func (r *mutationResolver) CreateOrder(ctx context.Context, input models.OrderInput) (*models.Order, error) {
+	order := &models.Order{
 		Name:  input.Name,
 		Desc:  input.Desc,
 		Image: input.Image,
 	}
-	model.SaveOrder(db, order)
+	models.SaveOrder(db, order)
 	return order, nil
 }
 
 // ID is the resolver for the ID field.
-func (r *orderResolver) ID(ctx context.Context, obj *model.Order) (int, error) {
+func (r *orderResolver) ID(ctx context.Context, obj *models.Order) (int, error) {
 	return int(obj.ID), nil
 }
 
 // Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	return model.FindAllUsers(db), nil
+func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
+	return models.FindAllUsers(db), nil
 }
 
 // Orders is the resolver for the orders field.
-func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
-	return model.FindAllOrders(db), nil
+func (r *queryResolver) Orders(ctx context.Context) ([]*models.Order, error) {
+	return models.FindAllOrders(db), nil
 }
 
 // ID is the resolver for the ID field.
-func (r *userResolver) ID(ctx context.Context, obj *model.User) (int, error) {
+func (r *userResolver) ID(ctx context.Context, obj *models.User) (int, error) {
 	return int(obj.ID), nil
 }
 
 // Age is the resolver for the Age field.
-func (r *userResolver) Age(ctx context.Context, obj *model.User) (int, error) {
+func (r *userResolver) Age(ctx context.Context, obj *models.User) (int, error) {
 	return int(obj.Age), nil
 }
 
@@ -81,3 +78,4 @@ type userResolver struct{ *Resolver }
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
+var db = models.New()
