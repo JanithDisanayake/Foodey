@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
-	// "go-backend/model"
-	"log"
+	"go-backend/graph/model"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -31,13 +29,7 @@ func main() {
 	r := gin.Default()
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
-	db, err := gorm.Open(sqlite.Open("foodey.db"), &gorm.Config{})
-	if err != nil {
-		log.Fatal("failed to connect database")
-	} else {
-		fmt.Printf(" 🎯 Database is created \n\n")
-	}
-	db.AutoMigrate(&User{}, &Order{})
+	db := model.New()
 
 	r.GET("/users", func(context *gin.Context) {
 		var users []User
