@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"go-backend/model"
+	"go-backend/controllers/graphql"
+	"go-backend/models"
 	"net/http"
 	"strconv"
 
@@ -29,7 +30,7 @@ func main() {
 	r := gin.Default()
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
-	db := model.New()
+	db := models.New()
 
 	r.GET("/users", func(context *gin.Context) {
 		var users []User
@@ -94,6 +95,9 @@ func main() {
 
 		context.JSON(http.StatusOK, order)
 	})
+
+	r.POST("/query", graphql.GraphqlHandler())
+	r.GET("/", graphql.PlaygroundHandler())
 
 	r.Run(":3000")
 }
