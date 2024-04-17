@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"go-backend/controllers/graphql"
 	"go-backend/controllers/rest"
-	"go-backend/models"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -30,32 +28,18 @@ func main() {
 	r := gin.Default()
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
-	db := models.New()
-
+	// user endpoints
 	r.GET("/users", rest.GetAllUsers)
 	r.GET("/users/:id", rest.GetUserById)
 	r.POST("/users", rest.CreateUser)
 	r.PATCH("/users", rest.UpdateUser)
 	r.DELETE("/users/:id", rest.RemoveUser)
 
-	r.GET("/orders/", func(context *gin.Context) {
-		var orders []Order
-		db.Find(&orders)
+	// order endpoints
+	r.GET("/orders/", rest.GetAllOrders)
+	r.POST("/orders/", rest.CreateOrder)
 
-		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		context.JSON(http.StatusOK, orders)
-	})
-
-	r.POST("/orders/", func(context *gin.Context) {
-		var order Order
-		if err := context.ShouldBind(&order); err != nil {
-			context.String(http.StatusBadRequest, "bad request %v", err)
-		}
-		db.Create(&Order{Name: order.Name, Desc: order.Desc, Image: order.Image})
-
-		context.JSON(http.StatusOK, order)
-	})
-
+	// graphql endpoints
 	r.POST("/query", graphql.GraphqlHandler())
 	r.GET("/", graphql.PlaygroundHandler())
 
