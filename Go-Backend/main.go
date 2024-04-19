@@ -5,6 +5,8 @@ import (
 	"go-backend/controllers/graphql"
 	"go-backend/controllers/rest"
 
+	"github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -26,6 +28,11 @@ type Order struct {
 
 func main() {
 	r := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	r.Use(cors.New(config))
+	r.Use(cors.Default())
 	fmt.Print(" 🚀 Server is Up and Running \n\n")
 
 	// user endpoints
