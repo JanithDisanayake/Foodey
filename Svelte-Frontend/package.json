@@ -18,5 +18,8 @@
 		"tailwindcss": "^1.9.6",
 		"vite": "^4.3.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@urql/svelte": "^4.1.1"
+	}
 }

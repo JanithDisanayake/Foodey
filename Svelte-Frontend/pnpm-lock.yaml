@@ -1,5 +1,14 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@urql/svelte':
+    specifier: ^4.1.1
+    version: 4.1.1(svelte@3.59.1)
+
 devDependencies:
   '@sveltejs/adapter-auto':
     specifier: ^2.0.0
@@ -27,6 +36,15 @@ devDependencies:
     version: 4.3.9
 
 packages:
+
+  /@0no-co/graphql.web@1.0.7:
+    resolution: {integrity: sha512-E3Qku4mTzdrlwVWGPxklDnME5ANrEGetvYw4i2GCRlppWXXE4QD66j7pwb8HelZwS6LnqEChhrSOGCXpbiu6MQ==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+    dev: false
 
   /@esbuild/android-arm64@0.17.19:
     resolution: {integrity: sha512-KBMWvEZooR7+kzY0BtbTQn0OAYY7CsiydT63pVEaPtVYF0hXbUaOyZog37DKxK7NF3XacBJOpYT4adIJh+avxA==}
@@ -326,6 +344,27 @@ packages:
   /@types/cookie@0.5.1:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
     dev: true
+
+  /@urql/core@5.0.1:
+    resolution: {integrity: sha512-bTtJDbPGF7UNynGt0E0DgokBeGUL9IU33+k7s/c6dvBUjwO2mOxB0GWNe7fhUcqIJAU1sONYkabTep/OGaxhsQ==}
+    dependencies:
+      '@0no-co/graphql.web': 1.0.7
+      wonka: 6.3.4
+    transitivePeerDependencies:
+      - graphql
+    dev: false
+
+  /@urql/svelte@4.1.1(svelte@3.59.1):
+    resolution: {integrity: sha512-GqgfTtOB6VkQGEazfNl5UasviWjyEZp15I+rG5bpTDQZJSZgkkGZJF+4CdaNNQVBdnWeQlKOsyXRiadYXfe5Vw==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0
+    dependencies:
+      '@urql/core': 5.0.1
+      svelte: 3.59.1
+      wonka: 6.3.4
+    transitivePeerDependencies:
+      - graphql
+    dev: false
 
   /acorn-node@1.8.2:
     resolution: {integrity: sha512-8mt+fslDufLYntIoPAaIMUe/lrbrehIiwmR3t2k9LljIzoigEPF27eLk2hy8zSGzmR/ogr7zbRKINMo1u0yh5A==}
@@ -1001,7 +1040,6 @@ packages:
   /svelte@3.59.1:
     resolution: {integrity: sha512-pKj8fEBmqf6mq3/NfrB9SLtcJcUvjYSWyePlfCqN9gujLB25RitWK8PvFzlwim6hD/We35KbPlRteuA6rnPGcQ==}
     engines: {node: '>= 8'}
-    dev: true
 
   /tailwindcss@1.9.6:
     resolution: {integrity: sha512-nY8WYM/RLPqGsPEGEV2z63riyQPcHYZUJpAwdyBzVpxQHOHqHE+F/fvbCeXhdF1+TA5l72vSkZrtYCB9hRcwkQ==}
@@ -1113,6 +1151,10 @@ packages:
     dependencies:
       vite: 4.3.9
     dev: true
+
+  /wonka@6.3.4:
+    resolution: {integrity: sha512-CjpbqNtBGNAeyNS/9W6q3kSkKE52+FjIj7AkFlLr11s/VWGUu6a2CdYSdGxocIhIVjaW/zchesBQUKPVU69Cqg==}
+    dev: false
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
