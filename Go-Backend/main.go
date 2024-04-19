@@ -8,23 +8,7 @@ import (
 	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
-
-type User struct {
-	gorm.Model
-	ID   uint `gorm:"primaryKey;unique"`
-	Name string
-	Age  uint
-}
-
-type Order struct {
-	gorm.Model
-	ID    uint `gorm:"primaryKey;unique"`
-	Name  string
-	Desc  string
-	Image string
-}
 
 func main() {
 	r := gin.Default()
