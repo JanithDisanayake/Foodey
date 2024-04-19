@@ -6,8 +6,8 @@
     cacheExchange,
     fetchExchange,
   } from "@urql/svelte";
-  export let data;
-  const users = data.users; // this property
+
+  export let data;          // from rest endpoint
 
   const client = new Client({
     url: "http://localhost:3000/query",
@@ -26,15 +26,12 @@
       }
     }
   `;
-
   // Fetch data using the queryStore
   const todos = queryStore({
     client: getContextClient(),
     query: GET_USERS,
   });
 
-  // Access the data property of the todos store
-  $: userData = $todos.data;
 </script>
 
 {#if $todos.fetching}
@@ -42,13 +39,9 @@
 {:else if $todos.error}
   <p>Error: {$todos.error.message}</p>
 {:else}
-  <!-- Display the JSON data -->
-  <pre>{JSON.stringify(userData, null, 2)}</pre>
-{/if}
+<h1 class="text-4xl font-bold ml-12 my-5">{data.title}</h1>
 
-<!-- <h1 class="text-4xl font-bold ml-12 my-5">{data.title}</h1> -->
-
-<!--<div class="relative overflow-x-auto px-10 mb-12">
+<div class="relative overflow-x-auto px-10 mb-12">
   <table class="w-full text-sm text-left text-black dark:text-gray-400">
     <thead
       class="text-s text-white font-bold uppercase bg-black dark:bg-gray-700 dark:text-gray-400"
@@ -61,7 +54,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each users as user}
+      {#each $todos.data.users as user}
         <tr
           class="bg-orange-200 border-b dark:bg-gray-800 dark:border-gray-700"
         >
@@ -84,4 +77,5 @@
       {/each}
     </tbody>
   </table>
-</div>-->
+</div>
+{/if}
